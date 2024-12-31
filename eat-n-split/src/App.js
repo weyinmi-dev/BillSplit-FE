@@ -21,6 +21,14 @@ const initialFriends = [
   },
 ];
 
+function Button({ children, onClick }) {
+  return (
+    <button className="button" onClick={onClick}>
+      {children}
+    </button>
+  );
+}
+
 export default function App() {
   const [friends, setFriends] = useState(initialFriends);
   const [showAddFriend, setShowAddFriend] = useState(false);
@@ -31,7 +39,7 @@ export default function App() {
   }
 
   function handleAddFriend(friend) {
-    setFriends((friends) => [...friends, friends]);
+    setFriends((friends) => [...friends, friend]);
     setShowAddFriend(false);
   }
 
@@ -79,14 +87,6 @@ export default function App() {
   );
 }
 
-function Button({ children, onClick }) {
-  return (
-    <button className="button" onClick={onClick}>
-      {children}
-    </button>
-  );
-}
-
 function FriendsList({ friends, onSelection, selectedFriend }) {
   return (
     <ul>
@@ -103,8 +103,10 @@ function FriendsList({ friends, onSelection, selectedFriend }) {
 }
 
 function Friend({ friend, onSelection, selectedFriend }) {
+  const isSelected = selectedFriend?.id === friend.id;
+
   return (
-    <li>
+    <li className={isSelected ? "selected" : ""}>
       <img src={friend.image} alt={friend.name} />
       <h3>{friend.name}</h3>
 
@@ -121,6 +123,10 @@ function Friend({ friend, onSelection, selectedFriend }) {
       )}
 
       {friend.balance === 0 && <p>You and {friend.name} are even</p>}
+
+      <Button onClick={() => onSelection(friend)}>
+        {isSelected ? "Close" : "Select"}
+      </Button>
     </li>
   );
 }
@@ -160,7 +166,7 @@ function FormAddFriend({ onAddFriend }) {
       <label>🖼️ Image URL</label>
       <input
         type="text"
-        value={name}
+        value={image}
         onChange={(e) => setImage(e.target.value)}
       />
 
@@ -197,8 +203,15 @@ function FormSplitBill({ selectedFriend, onSplitBill }) {
       <input
         type="text"
         value={paidByUser}
-        onChange={(e) => setPaidByUser(Number(e.target.value))}
+        onChange={(e) =>
+          setPaidByUser(
+            Number(e.target.value) > bill ? paidByUser : Number(e.target.value)
+          )
+        }
       />
+
+      <label>🧑🏾‍🤝‍🧑🏽{selectedFriend.name}'s expense</label>
+      <input type="text" disabled value={paidByFriend} />
 
       <label>🤑 Who is paying the bill?</label>
       <select
