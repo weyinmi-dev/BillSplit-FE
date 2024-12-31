@@ -213,13 +213,13 @@ function FormSplitBill({ selectedFriend, onSplitBill }) {
       <label>🧑🏾‍🤝‍🧑🏽{selectedFriend.name}'s expense</label>
       <input type="text" disabled value={paidByFriend} />
 
-      <label>🤑 Who is paying the bill?</label>
+      <label>🤑 Who is paying the bill</label>
       <select
         value={whoIsPaying}
         onChange={(e) => setWhoIsPaying(e.target.value)}
       >
         <option value="user">You</option>
-        <option value="friend">{selectedFriend}</option>
+        <option value="friend">{selectedFriend.name}</option>
       </select>
 
       <Button>Split bill</Button>
